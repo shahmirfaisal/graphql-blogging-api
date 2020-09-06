@@ -1,0 +1,120 @@
+type Query {
+  users(search: String, first: Int, skip: Int): [User!]!
+  user(id: ID!): User!
+
+  isLogin: User!
+
+  posts(search: String, userId: ID, first: Int, skip: Int): [Post!]!
+  post(id: ID!): Post!
+
+  comments(postId: ID, search: String, first: Int, skip: Int): [Comment!]!
+  comment(id: ID!): Comment!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): AuthPayload!
+  login(data: LoginInput!): AuthPayload!
+  updateUser(data: UpdateUserInput!): User!
+  deleteUser: User!
+  requestResetPassword(email: String!): Boolean!
+  resetPassword(token: String!, password: String!): User!
+
+  createPost(data: CreatePostInput!): Post!
+  updatePost(id: ID!, data: UpdatePostInput!): Post!
+  deletePost(id: ID!): Post!
+
+  createComment(data: CreateCommentInput!): Comment!
+  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
+  deleteComment(id: ID!): Comment!
+}
+
+type Subscription {
+  comment(postId: ID!): CommentSubscriptionPayload!
+  post: PostSubscriptionPayload!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+}
+
+input UpdatePostInput {
+  title: String
+  body: String
+}
+
+input CreateCommentInput {
+  text: String!
+  post: ID!
+}
+
+input UpdateCommentInput {
+  text: String!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+  password: String
+  posts: [Post!]!
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  author: User!
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  author: User!
+  post: Post!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  node: Post
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
