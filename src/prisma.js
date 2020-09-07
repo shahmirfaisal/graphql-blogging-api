@@ -5,8 +5,7 @@ dotenv.config({ path: "config/prod.env" });
 
 const prisma = new Prisma({
   typeDefs: "./src/generated/prisma.graphql",
-  endpoint:
-    "https://shahmir-faisal-blog-a3b034697a.herokuapp.com/shahmir-faisal-blog/prod",
+  endpoint: process.env.PRISMA_ENDPOINT,
   secret: "programmingchola",
   fragmentReplacements,
 });
