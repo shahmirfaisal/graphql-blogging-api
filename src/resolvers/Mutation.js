@@ -4,12 +4,13 @@ import getUserId from "../utils/getUserId";
 import nodemailer from "nodemailer";
 import sendgridTransport from "nodemailer-sendgrid-transport";
 import crypto from "crypto";
+import dotenv from "dotenv";
+dotenv.config({ path: "config/prod.env" });
 
 const transport = nodemailer.createTransport(
   sendgridTransport({
     auth: {
-      api_key:
-        "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",
+      api_key: process.env.SENDGRID_API_KEY,
     },
   })
 );
@@ -37,12 +38,12 @@ const Mutation = {
       from: "shahmir049@gmail.com",
       to: args.data.email,
       subject: "Welcome to our Blog!",
-      html: `<p>Hi ${args.data.name}, welcome to our community.</p>`,
+      html: `<p>Hi ${args.data.name}, welcome to our blog.</p>`,
     });
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, "programmingchola"),
+      token: jwt.sign({ userId: user.id }, process.env.SECRET),
     };
   },
 
@@ -60,7 +61,7 @@ const Mutation = {
     if (!matchPassword) throw new Error("Wrong password!");
     return {
       user,
-      token: jwt.sign({ userId: user.id }, "programmingchola"),
+      token: jwt.sign({ userId: user.id }, process.env.SECRET),
     };
   },
 

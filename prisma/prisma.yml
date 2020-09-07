@@ -1,4 +1,3 @@
-#endpoint: ${env:PRISMA_ENDPOINT}
-endpoint: https://shahmir-faisal-blog-a3b034697a.herokuapp.com/shahmir-faisal-blog/prod
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: datamodel.prisma
-secret: programmingchola
+secret: ${env:SECRET}

@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "dev": "nodemon src/index.js -e js,graphql --exec babel-node",
-    "get-schema": "graphql get-schema -p prisma"
+    "get-schema": "graphql get-schema -p prisma --dotenv config/prod.env"
   },
   "keywords": [],
   "author": "",

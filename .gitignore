@@ -2,4 +2,3 @@ node_modules
 config
 dist
 .graphqlconfig
-prisma/prisma.yml
