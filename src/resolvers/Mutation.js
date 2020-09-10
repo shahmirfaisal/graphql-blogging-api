@@ -1,4 +1,4 @@
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import getUserId from "../utils/getUserId";
 import nodemailer from "nodemailer";
@@ -167,6 +167,7 @@ const Mutation = {
       data: {
         title: args.data.title,
         body: args.data.body,
+        commentsEnabled: args.data.commentsEnabled,
         author: {
           connect: {
             id: userId,
@@ -218,9 +219,12 @@ const Mutation = {
     const userId = getUserId(request);
 
     const authorExist = await prisma.exists.User({ id: userId });
-    const postExist = await prisma.exists.Post({ id: args.data.post });
+    const postExist = await prisma.exists.Post({
+      id: args.data.post,
+      commentsEnabled: true,
+    });
     if (!authorExist) throw new Error("Author not found!");
-    if (!postExist) throw new Error("Post not found!");
+    if (!postExist) throw new Error("Unable to add the comment!");
     return prisma.mutation.createComment(
       {
         data: {
@@ -262,20 +266,34 @@ const Mutation = {
 
   async deleteComment(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
+    console.log("HELLO");
 
-    const commentExist = await prisma.exists.Comment({
-      id: args.id,
-      author: { id: userId },
-    });
-    if (!commentExist) throw new Error("Unable to delete comment!");
-    return prisma.mutation.deleteComment(
-      {
-        where: {
-          id: args.id,
-        },
-      },
-      info
+    const comment = await prisma.query.comment(
+      { where: { id: args.id } },
+      "{ id author { id } post { id author { id } } }"
     );
+
+    console.log(comment, "Comment");
+
+    if (!comment) throw new Error("Comment not found!");
+    if (comment.author.id === userId || comment.post.author.id === userId) {
+      return prisma.mutation.deleteComment(
+        {
+          where: {
+            id: args.id,
+          },
+        },
+        info
+      );
+    }
+
+    throw new Error("Unable to delete comment!");
+
+    // const commentExist = await prisma.exists.Comment({
+    //   id: args.id,
+    //   author: { id: userId },
+    // });
+    // if (!commentExist) throw new Error("Unable to delete comment!");
   },
 };
 

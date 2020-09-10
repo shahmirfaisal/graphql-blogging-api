@@ -25,7 +25,7 @@ type Mutation {
 
   createComment(data: CreateCommentInput!): Comment!
   updateComment(id: ID!, data: UpdateCommentInput!): Comment!
-  deleteComment(id: ID!): Comment!
+  deleteComment(id: ID!, postId: ID): Comment!
 }
 
 type Subscription {
@@ -52,11 +52,13 @@ input UpdateUserInput {
 input CreatePostInput {
   title: String!
   body: String!
+  commentsEnabled: Boolean!
 }
 
 input UpdatePostInput {
   title: String
   body: String
+  commentsEnabled: Boolean
 }
 
 input CreateCommentInput {
@@ -92,6 +94,7 @@ type Post {
   comments: [Comment!]!
   createdAt: String!
   updatedAt: String!
+  commentsEnabled: Boolean!
 }
 
 type Comment {

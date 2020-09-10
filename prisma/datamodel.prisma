@@ -19,6 +19,7 @@ type Post {
   comments: [Comment!]! @relation(name: "CommentToPost", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+  commentsEnabled: Boolean!
 }
 
 type Comment {
