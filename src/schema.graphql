@@ -47,17 +47,22 @@ input LoginInput {
 input UpdateUserInput {
   name: String
   email: String
+  image: String
 }
 
 input CreatePostInput {
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   commentsEnabled: Boolean!
 }
 
 input UpdatePostInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
 }
 
@@ -73,8 +78,9 @@ input UpdateCommentInput {
 type User {
   id: ID!
   name: String!
-  email: String
-  password: String
+  image: String!
+  email: String!
+  password: String!
   posts: [Post!]!
   comments: [Comment!]!
   createdAt: String!
@@ -90,11 +96,13 @@ type Post {
   id: ID!
   title: String!
   body: String!
+  description: String!
+  commentsEnabled: Boolean!
+  coverImage: String!
   author: User!
   comments: [Comment!]!
   createdAt: String!
   updatedAt: String!
-  commentsEnabled: Boolean!
 }
 
 type Comment {

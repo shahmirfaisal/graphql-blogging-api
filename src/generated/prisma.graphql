@@ -1,5 +1,5 @@
 # source: https://shahmir-faisal-blog-a3b034697a.herokuapp.com/shahmir-faisal-blog/prod
-# timestamp: Thu Sep 10 2020 15:41:33 GMT+0500 (Pakistan Standard Time)
+# timestamp: Wed Sep 16 2020 14:17:23 GMT+0500 (Pakistan Standard Time)
 
 type AggregateComment {
   count: Int!
@@ -543,6 +543,8 @@ type Post implements Node {
   id: ID!
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   author: User!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   createdAt: DateTime!
@@ -564,6 +566,8 @@ input PostCreateInput {
   id: ID
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   commentsEnabled: Boolean!
   author: UserCreateOneWithoutPostsInput!
   comments: CommentCreateManyWithoutPostInput
@@ -583,6 +587,8 @@ input PostCreateWithoutAuthorInput {
   id: ID
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   commentsEnabled: Boolean!
   comments: CommentCreateManyWithoutPostInput
 }
@@ -591,6 +597,8 @@ input PostCreateWithoutCommentsInput {
   id: ID
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   commentsEnabled: Boolean!
   author: UserCreateOneWithoutPostsInput!
 }
@@ -611,6 +619,10 @@ enum PostOrderByInput {
   title_DESC
   body_ASC
   body_DESC
+  description_ASC
+  description_DESC
+  coverImage_ASC
+  coverImage_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -623,6 +635,8 @@ type PostPreviousValues {
   id: ID!
   title: String!
   body: String!
+  description: String!
+  coverImage: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   commentsEnabled: Boolean!
@@ -757,6 +771,86 @@ input PostScalarWhereInput {
 
   """All values not ending with the given string."""
   body_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  coverImage: String
+
+  """All values that are not equal to given value."""
+  coverImage_not: String
+
+  """All values that are contained in given list."""
+  coverImage_in: [String!]
+
+  """All values that are not contained in given list."""
+  coverImage_not_in: [String!]
+
+  """All values less than the given value."""
+  coverImage_lt: String
+
+  """All values less than or equal the given value."""
+  coverImage_lte: String
+
+  """All values greater than the given value."""
+  coverImage_gt: String
+
+  """All values greater than or equal the given value."""
+  coverImage_gte: String
+
+  """All values containing the given string."""
+  coverImage_contains: String
+
+  """All values not containing the given string."""
+  coverImage_not_contains: String
+
+  """All values starting with the given string."""
+  coverImage_starts_with: String
+
+  """All values not starting with the given string."""
+  coverImage_not_starts_with: String
+
+  """All values ending with the given string."""
+  coverImage_ends_with: String
+
+  """All values not ending with the given string."""
+  coverImage_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -849,6 +943,8 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
   author: UserUpdateOneRequiredWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
@@ -857,12 +953,16 @@ input PostUpdateInput {
 input PostUpdateManyDataInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
 }
 
 input PostUpdateManyMutationInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
 }
 
@@ -893,6 +993,8 @@ input PostUpdateOneRequiredWithoutCommentsInput {
 input PostUpdateWithoutAuthorDataInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
   comments: CommentUpdateManyWithoutPostInput
 }
@@ -900,6 +1002,8 @@ input PostUpdateWithoutAuthorDataInput {
 input PostUpdateWithoutCommentsDataInput {
   title: String
   body: String
+  description: String
+  coverImage: String
   commentsEnabled: Boolean
   author: UserUpdateOneRequiredWithoutPostsInput
 }
@@ -1049,6 +1153,86 @@ input PostWhereInput {
 
   """All values not ending with the given string."""
   body_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  coverImage: String
+
+  """All values that are not equal to given value."""
+  coverImage_not: String
+
+  """All values that are contained in given list."""
+  coverImage_in: [String!]
+
+  """All values that are not contained in given list."""
+  coverImage_not_in: [String!]
+
+  """All values less than the given value."""
+  coverImage_lt: String
+
+  """All values less than or equal the given value."""
+  coverImage_lte: String
+
+  """All values greater than the given value."""
+  coverImage_gt: String
+
+  """All values greater than or equal the given value."""
+  coverImage_gte: String
+
+  """All values containing the given string."""
+  coverImage_contains: String
+
+  """All values not containing the given string."""
+  coverImage_not_contains: String
+
+  """All values starting with the given string."""
+  coverImage_starts_with: String
+
+  """All values not starting with the given string."""
+  coverImage_not_starts_with: String
+
+  """All values ending with the given string."""
+  coverImage_ends_with: String
+
+  """All values not ending with the given string."""
+  coverImage_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1134,6 +1318,7 @@ type Subscription {
 type User implements Node {
   id: ID!
   name: String!
+  image: String!
   email: String!
   password: String!
   resetToken: String
@@ -1157,6 +1342,7 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   name: String!
+  image: String!
   email: String!
   password: String!
   resetToken: String
@@ -1178,6 +1364,7 @@ input UserCreateOneWithoutPostsInput {
 input UserCreateWithoutCommentsInput {
   id: ID
   name: String!
+  image: String!
   email: String!
   password: String!
   resetToken: String
@@ -1188,6 +1375,7 @@ input UserCreateWithoutCommentsInput {
 input UserCreateWithoutPostsInput {
   id: ID
   name: String!
+  image: String!
   email: String!
   password: String!
   resetToken: String
@@ -1209,6 +1397,8 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  image_ASC
+  image_DESC
   email_ASC
   email_DESC
   password_ASC
@@ -1226,6 +1416,7 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   name: String!
+  image: String!
   email: String!
   password: String!
   resetToken: String
@@ -1275,6 +1466,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
+  image: String
   email: String
   password: String
   resetToken: String
@@ -1285,6 +1477,7 @@ input UserUpdateInput {
 
 input UserUpdateManyMutationInput {
   name: String
+  image: String
   email: String
   password: String
   resetToken: String
@@ -1307,6 +1500,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 
 input UserUpdateWithoutCommentsDataInput {
   name: String
+  image: String
   email: String
   password: String
   resetToken: String
@@ -1316,6 +1510,7 @@ input UserUpdateWithoutCommentsDataInput {
 
 input UserUpdateWithoutPostsDataInput {
   name: String
+  image: String
   email: String
   password: String
   resetToken: String
@@ -1422,6 +1617,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
   email: String
 
   """All values that are not equal to given value."""

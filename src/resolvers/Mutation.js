@@ -6,6 +6,13 @@ import sendgridTransport from "nodemailer-sendgrid-transport";
 import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config({ path: "config/prod.env" });
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "dw3ap99ie",
+  api_key: "821523511441267",
+  api_secret: "gB05RfIeRoEEaWJE-Tfx710utvQ",
+});
 
 const transport = nodemailer.createTransport(
   sendgridTransport({
@@ -29,6 +36,8 @@ const Mutation = {
       data: {
         ...args.data,
         password,
+        image:
+          "https://res.cloudinary.com/dw3ap99ie/image/upload/v1590679237/1589133680691-profile-img_bgii9i.jpg",
       },
     };
 
@@ -67,9 +76,16 @@ const Mutation = {
 
   async updateUser(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
+    console.log("Update");
 
     const userExist = await prisma.exists.User({ id: userId });
     if (!userExist) throw new Error("User not found!");
+
+    if (args.data.image) {
+      const res = await cloudinary.uploader.upload(args.data.image);
+      args.data.image = res.url;
+    }
+
     return prisma.mutation.updateUser(
       {
         where: {
@@ -163,11 +179,18 @@ const Mutation = {
     const authorExist = await prisma.exists.User({ id: userId });
     if (!authorExist) throw new Error("Author not found!");
 
+    const res = await cloudinary.uploader.upload(args.data.coverImage);
+    args.data.coverImage = res.url;
+
+    const { title, body, description, coverImage, commentsEnabled } = args.data;
+
     const opArgs = {
       data: {
-        title: args.data.title,
-        body: args.data.body,
-        commentsEnabled: args.data.commentsEnabled,
+        title,
+        body,
+        description,
+        coverImage,
+        commentsEnabled,
         author: {
           connect: {
             id: userId,

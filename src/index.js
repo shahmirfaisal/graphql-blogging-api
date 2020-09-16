@@ -20,5 +20,8 @@ const server = new GraphQLServer({
   fragmentReplacements,
 });
 server
-  .start({ port: process.env.PORT || 4000 })
+  .start({
+    port: process.env.PORT || 4000,
+    bodyParserOptions: { limit: "20mb", type: "application/json" },
+  })
   .then(() => console.log("Server started!"));
