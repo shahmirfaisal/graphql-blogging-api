@@ -52,7 +52,9 @@ const Mutation = {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, process.env.SECRET),
+      token: jwt.sign({ userId: user.id }, process.env.SECRET, {
+        expiresIn: "7d",
+      }),
     };
   },
 
@@ -70,7 +72,9 @@ const Mutation = {
     if (!matchPassword) throw new Error("Wrong password!");
     return {
       user,
-      token: jwt.sign({ userId: user.id }, process.env.SECRET),
+      token: jwt.sign({ userId: user.id }, process.env.SECRET, {
+        expiresIn: "7d",
+      }),
     };
   },
 
