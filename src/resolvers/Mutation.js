@@ -7,6 +7,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config({ path: "config/prod.env" });
 const cloudinary = require("cloudinary").v2;
+import validator from "validator";
 
 cloudinary.config({
   cloud_name: "dw3ap99ie",
@@ -24,6 +25,10 @@ const transport = nodemailer.createTransport(
 
 const Mutation = {
   async createUser(parent, args, { prisma }, info) {
+    if (!validator.isByteLength(args.data.name, { min: 1 })) {
+      throw new Error("Please enter name!");
+    }
+    if (!validator.isEmail(args.data.email)) throw new Error("Invalid email!");
     const emailTaken = await prisma.exists.User({ email: args.data.email });
     if (emailTaken) throw new Error("This email already exists!");
     if (args.data.password.length < 8) {
@@ -135,7 +140,7 @@ const Mutation = {
       subject: "Password reset request!",
       html: `
         <h1>Password reset request!</h1>
-        <p>Here's the token ${resetToken}</p>
+        <a href="http://localhost:3000/forgot-password/${resetToken}">Click here to reset your password</a>
       `,
     });
     return true;
@@ -180,13 +185,26 @@ const Mutation = {
   async createPost(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
+    const { title, body, description, coverImage, commentsEnabled } = args.data;
+
+    if (!validator.isByteLength(title, { min: 1 })) {
+      throw new Error("Please enter title!");
+    }
+    if (!validator.isByteLength(body, { min: 1 })) {
+      throw new Error("Please enter body!");
+    }
+    if (!validator.isByteLength(description, { min: 1 })) {
+      throw new Error("Please enter description!");
+    }
+    if (!coverImage || !validator.isByteLength(title, { min: 1 })) {
+      throw new Error("Please upload cover image!");
+    }
+
     const authorExist = await prisma.exists.User({ id: userId });
     if (!authorExist) throw new Error("Author not found!");
 
     const res = await cloudinary.uploader.upload(args.data.coverImage);
     args.data.coverImage = res.url;
-
-    const { title, body, description, coverImage, commentsEnabled } = args.data;
 
     const opArgs = {
       data: {
@@ -244,6 +262,10 @@ const Mutation = {
 
   async createComment(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
+
+    if (!validator.isByteLength(args.data.text, { min: 1 })) {
+      throw new Error("Please enter text!");
+    }
 
     const authorExist = await prisma.exists.User({ id: userId });
     const postExist = await prisma.exists.Post({
@@ -315,12 +337,6 @@ const Mutation = {
     }
 
     throw new Error("Unable to delete comment!");
-
-    // const commentExist = await prisma.exists.Comment({
-    //   id: args.id,
-    //   author: { id: userId },
-    // });
-    // if (!commentExist) throw new Error("Unable to delete comment!");
   },
 };
 
