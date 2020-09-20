@@ -85,7 +85,10 @@ const Mutation = {
 
   async updateUser(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
-    console.log("Update");
+
+    if (!args.data?.name?.trim()?.length) delete args.data.name;
+    if (!args.data?.email?.trim()?.length) delete args.data.email;
+    if (!args.data?.password?.trim()?.length) delete args.data.password;
 
     const userExist = await prisma.exists.User({ id: userId });
     if (!userExist) throw new Error("User not found!");
@@ -226,6 +229,11 @@ const Mutation = {
   async updatePost(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
+    if (!args.data?.title?.trim()?.length) delete args.data.title;
+    if (!args.data?.body?.trim()?.length) delete args.data.body;
+    if (!args.data?.description?.trim()?.length) delete args.data.description;
+    if (!args.data?.coverImage?.trim()?.length) delete args.data.coverImage;
+
     const postExist = await prisma.exists.Post({
       id: args.id,
       author: { id: userId },
@@ -296,6 +304,8 @@ const Mutation = {
 
   async updateComment(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
+
+    if (!args.data?.text?.trim()?.length) delete args.data.text;
 
     const commentExist = await prisma.exists.Comment({
       id: args.id,
