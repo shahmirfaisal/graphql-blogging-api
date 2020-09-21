@@ -49,6 +49,7 @@ const Query = {
       },
       first: args.first,
       skip: args.skip,
+      orderBy: args.orderBy,
     };
 
     return prisma.query.posts(opArgs, info);

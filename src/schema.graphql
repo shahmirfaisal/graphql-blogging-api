@@ -1,13 +1,30 @@
 type Query {
-  users(search: String, first: Int, skip: Int): [User!]!
+  users(
+    search: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput
+  ): [User!]!
   user(id: ID!): User!
 
   isLogin: User!
 
-  posts(search: String, userId: ID, first: Int, skip: Int): [Post!]!
+  posts(
+    search: String
+    userId: ID
+    first: Int
+    skip: Int
+    orderBy: PostOrderByInput
+  ): [Post!]!
   post(id: ID!): Post!
 
-  comments(postId: ID, search: String, first: Int, skip: Int): [Comment!]!
+  comments(
+    postId: ID
+    search: String
+    first: Int
+    skip: Int
+    orderBy: CommentOrderByInput
+  ): [Comment!]!
   comment(id: ID!): Comment!
 }
 
@@ -128,4 +145,55 @@ enum MutationType {
   CREATED
   UPDATED
   DELETED
+}
+
+enum PostOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  body_ASC
+  body_DESC
+  description_ASC
+  description_DESC
+  coverImage_ASC
+  coverImage_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  commentsEnabled_ASC
+  commentsEnabled_DESC
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  image_ASC
+  image_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiration_ASC
+  resetTokenExpiration_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
