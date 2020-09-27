@@ -93,6 +93,19 @@ const Mutation = {
     const userExist = await prisma.exists.User({ id: userId });
     if (!userExist) throw new Error("User not found!");
 
+    if (args.data?.email) {
+      if (!validator.isEmail(args.data.email)) {
+        throw new Error("Invalid email!");
+      }
+      const emailTaken = await prisma.exists.User({ email: args.data.email });
+      if (emailTaken) throw new Error("This email already exists!");
+    }
+    if (args.data?.password) {
+      if (args.data.password.length < 8) {
+        throw new Error("Password must be 8 characters long!");
+      }
+    }
+
     if (args.data.image) {
       const res = await cloudinary.uploader.upload(args.data.image);
       args.data.image = res.url;
